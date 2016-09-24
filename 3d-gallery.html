@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <style>
+
+    .stage {
+    	width: 100%;
+    	height: 500px;
+    	margin: 0 auto;
+    	perspective: 1000px;
+    }
+
+    .wrapper {
+    	width: 500px;
+    	height: 500px;
+    	position: relative;
+    	left: 0;
+    	right: 0;
+    	margin: 0 auto;
+    	transform-style: preserve-3d;
+    	transition:  transform 1s;
+    }
+
+    img {
+    	position: absolute;
+    	left: 0; right: 0; top: 0; bottom: 0;
+    	margin: auto;
+    }
+
+    </style>
+    <body>
+    	<div class="stage">
+    		<div class="wrapper">
+    			<img src="./images/1.jpg">
+    			<img src="./images/1.jpg">
+    			<img src="./images/1.jpg">
+    			<img src="./images/1.jpg">
+    			<img src="./images/1.jpg">
+    			<img src="./images/1.jpg">
+    		</div>
+    	</div>
+    <script>
+    	window.onload = () => {
+    		var elements = document.querySelectorAll('img'),
+    			num = elements.length;
+    		for(var index = 0;index < num;index++) {
+    			var distance = getTranslateZ(index, num, elements[index]);
+    			elements[index].setAttribute('style','transform: rotateY(' + 60*index + 'deg) translateZ(' + distance +'px);');
+    		}
+    		var wrapper = document.querySelector('.wrapper');
+    		let angle = 1;
+    		setInterval(() => {
+    			wrapper.setAttribute("style","transform: rotateY(" + angle * 60 + "deg);");
+                console.log('angle',angle);
+                angle++;
+                if(angle > num) {
+                    //完成最后一步动画后重置
+                    setTimeout(() => {
+                        resetTransform(wrapper);
+                    },1000);
+                    angle = 1;
+                }
+    		},1500);
+    	}
+
+    	function getTranslateZ(index, num, element) {
+    		var distance = element.clientWidth / 2 / Math.tan(2 / num  * Math.PI) + 180;
+    		return distance;
+    	}
+
+        function resetTransform(wrapper) {
+            wrapper.setAttribute('style','transform: rotateY(0deg); transition: none;');
+        }
+    </script>
+    </body>
+</html>
